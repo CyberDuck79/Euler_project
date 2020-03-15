@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/13 17:39:04 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/13 18:50:57 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/15 12:06:41 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Find the product abc.
 #include <strings.h>
 #include <math.h>
 
-static void	gen_primitive_triplet(int seed, int triplet[3])
+static void			gen_p_triplet(int seed, int triplet[3])
 {
 	triplet[0] = seed;
 	if (seed % 2)
@@ -37,35 +37,60 @@ static void	gen_primitive_triplet(int seed, int triplet[3])
 	}
 }
 
-static void	gen_multiple_triplet(int mult, int triplet[2])
+static void			gen_m_triplet(int mult, int p_triplet[3], int m_triplet[3])
 {
-	triplet[0] *= 2;
-	triplet[1] *= 2;
-	triplet[2] *= 2;
+	m_triplet[0] = p_triplet[0] * mult;
+	m_triplet[1] = p_triplet[1] * mult;
+	m_triplet[2] = p_triplet[2] * mult;
 }
 
-int			main(void)
+static int			triplet_sum(int triplet[3])
 {
-	int	seed = 3;
-	int mult = 2;
-	int sum = 0;
-	int	triplet[3];
+	return (triplet[0] + triplet[1] + triplet[2]);
+}
+
+static long long	triplet_product(int triplet[3])
+{
+	return (triplet[0] * triplet[1] * triplet[2]);
+}
+
+int					main(void)
+{
+	int			seed = 3;
+	int			mult = 2;
+	int			sum = 0;
+	int			p_triplet[3];
+	int			m_triplet[3];
+	long long	product;
 
 	while (sum != 1000)
 	{
-		gen_primitive_triplet(seed, triplet);
-		sum = (triplet[0] + triplet[1] + triplet[2]);
-		printf("primitive triplet : %i,%i,%i sum : %i\n", triplet[0], triplet[1], triplet[2], sum);
+		gen_p_triplet(seed, p_triplet);
+		sum = triplet_sum(p_triplet);
+		/*
+		printf("primitive triplet : %i,%i,%i sum : %i\n", \
+		p_triplet[0], \
+		p_triplet[1], \
+		p_triplet[2], \
+		sum);
+		*/
 		while (sum < 1000)
 		{
-			gen_multiple_triplet(mult, triplet);
-			sum = (triplet[0] + triplet[1] + triplet[2]);
-			printf("multiple triplet : %i,%i,%i sum : %i\n", triplet[0], triplet[1], triplet[2], sum);
+			gen_m_triplet(mult, p_triplet, m_triplet);
+			sum = triplet_sum(m_triplet);
+			/*
+			printf("multiple triplet : %i,%i,%i sum : %i\n", \
+			m_triplet[0], \
+			m_triplet[1], \
+			m_triplet[2], \
+			sum);
+			*/
 			mult++;
 		}
 		mult = 2;
 		seed++;
-
 	}
+	product = triplet_product(m_triplet);
+	printf("abc product : %lli\n", product);
 	return (0);
 }
