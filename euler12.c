@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/15 13:04:41 by fhenrion          #+#    #+#             */
-/*   Updated: 2020/03/15 14:01:55 by fhenrion         ###   ########.fr       */
+/*   Updated: 2020/03/15 14:13:39 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,20 @@ What is the value of the first triangle number to have over five hundred divisor
 
 static int	count_factors(int num)
 {
+	int count;
+	int i;
 	int n = num;
-	int i = 2;
-	int p = 1;
+	int prime = 1;
 
-	if (num == 1) return 1;
-
-	while (i * i <= n) 
+	for (i = 2; i * i <= n; i++) 
 	{
-		int c = 1;
-		while (n % i == 0)
-		{
-			n/= i;
-			c++;
-		}
-		i++;
-		p *= c;
+		for (count = 1; n % count == 0; count++)
+			n /= i;
+		prime *= count;
 	}
 	if (n == num || n > 1)
-		p *= 1 + 1;
-	return p;
+		prime *= 2;
+	return (prime);
 }
 
 int			main(void)
